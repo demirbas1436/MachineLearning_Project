@@ -176,7 +176,7 @@ print("\nSütunlara göre özet bilgiler:")
 print(merged_data.describe(include='all'))
 
 print("\nEksik değerlerin toplamı:")
-print(merged_data.isnull().sum())
+print(merged_data.isnull().sum()) ```
 
 
 ## **Veri Analizi ve Görselleştirme**
@@ -193,7 +193,7 @@ grouped = df.groupby('Rating')['Rating'].count()
 
 # Barplot ile görselleştirme
 sns.barplot(x = grouped.index, y = grouped.values, palette='mako').set_title('Review Count by Rating')
-plt.show()
+plt.show()```
 
 
 
