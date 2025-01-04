@@ -193,8 +193,11 @@ grouped = df.groupby('Rating')['Rating'].count()
 
 # Barplot ile görselleştirme
 sns.barplot(x = grouped.index, y = grouped.values, palette='mako').set_title('Review Count by Rating')
-plt.show()!
-[rating](https://github.com/user-attachments/assets/4d742d60-ec23-49c2-862b-0ab1cf7b1270)
+plt.show()
+
+
+
+![rating](https://github.com/user-attachments/assets/4d742d60-ec23-49c2-862b-0ab1cf7b1270)
 
 
 
