@@ -113,7 +113,7 @@ Page,Review Number,Rating,Review Text
 ```
 
 
-## **Proje Adı: CSV Dosya Birleştirme ve Temel Veri Analizi**
+## **CSV Dosya Birleştirme ve Temel Veri Analizi**
 
 Bu proje, farklı restoranlardan (Sehzade Cag Kebap, Uzan Et Mangal ve Yesemek Gaziantep) alınan Tripadvisor yorumlarını içeren CSV dosyalarını birleştirir, eksik verileri doldurur ve temel analizler yapar.
 
@@ -232,22 +232,31 @@ sns.barplot(x = grouped_rating.index, y = grouped_rating.values).set_title('Word
 ```
 ![wordcount](https://github.com/user-attachments/assets/3a94325d-305e-4a88-b818-2a96a22fc40e)
 
-Türkçe stopwords listesini yükle
+
+Türkçe stopwords listesini yüklemek için "stopwords.words('turkish')" kullanılır.
+```python
 sw = stopwords.words('turkish')
+```
 
-
+```bash
 pip install stanza
+```
+
 Stanza, doğal dil işleme projelerinde kapsamlı ve güçlü araçlar sunarak metin verilerinden anlam çıkarma süreçlerini kolaylaştırır.
 
+```python
 def doc_preparer_stanza(doc, stop_words=stopwords_tr):
+```
 Bu fonksiyon, verilen bir metni işleyerek küçük harfe dönüştürür, noktalama ve durdurma kelimelerini çıkarır ve kelimeleri kök hâline getirir.
 
+```python
 df['tokenized'] = df['Review Text'].apply(doc_preparer_stanza)
+```
 Bu kod, Review Text sütunundaki her metni doc_preparer_stanza fonksiyonuyla işleyerek elde edilen sonuçları tokenized adlı yeni bir sütunda saklar.
 
-Kelimelerde Frekans Dağılımı
+**Kelimelerde Frekans Dağılımı**
 
-
+```python
 df['tokenized_words'] = [x.split() for x in df['tokenized']]
 tokenized_words = df['tokenized_words'].to_list()
 
@@ -258,37 +267,41 @@ word_list
 freq_dist_text = nltk.FreqDist(word_list)
 plt.subplots(figsize=(20,12))
 freq_dist_text.plot(30)
+```
 
 ![kelimedagilimi](https://github.com/user-attachments/assets/7d0e0ded-7e70-475a-ad15-09bdef58bf95)
 
 Bu frekans dağılımı, hangi kelimelerin daha yüksek bir sıklığa sahip olduğunu göstermektedir.
 
-daha sonra kelime bukutları oluşturldu
+daha sonra kelime bulutları oluşturldu.
+```python
 for rating in list(df['new_rating'].unique()):
     show_wordcloud(df[df['new_rating']==rating]['tokenized'], title=rating)
-
+```
 
 ![keliembulutu](https://github.com/user-attachments/assets/9ba0a4a0-d232-4b21-9be5-1da36f2114a9)
 
 Yukarıdaki kelime bulutu, her kategoride en sık görünen kelimeleri göstermektedir.
 
+```python
 def pos_tags_stanza(doc):
+```
 
 Bu kod bir metin veri kümesini işlemek ve belirli metrikleri hesaplamak için kullanılır.
 
-POS Etiketleme: Stanza kütüphanesi kullanılarak kelimelerin dil bilgisel etiketleri (POS tags) çıkarılıyor.
+	POS Etiketleme: Stanza kütüphanesi kullanılarak kelimelerin dil bilgisel etiketleri (POS tags) çıkarılıyor.
+	
+	Yeni Bir DataFrame Oluşturma: df_eda adında yeni bir veri çerçevesi oluşturuluyor.
+	
+	Lemmatized Metin: İşlenmiş metin (LEM) sütununa atanıyor.
+	
+	POS Etiketleri: LEM sütunundaki her kelimenin POS etiketleri çıkarılıyor ve POS sütununa atanıyor.
+	
+	(POS etiketleme, doğal dil işleme (NLP) alanında bir metindeki her kelimenin dil bilgisel kategorisini belirlemek için kullanılır.)
 
-Yeni Bir DataFrame Oluşturma: df_eda adında yeni bir veri çerçevesi oluşturuluyor.
 
-Lemmatized Metin: İşlenmiş metin (LEM) sütununa atanıyor.
-
-POS Etiketleri: LEM sütunundaki her kelimenin POS etiketleri çıkarılıyor ve POS sütununa atanıyor.
-
-(POS etiketleme, doğal dil işleme (NLP) alanında bir metindeki her kelimenin dil bilgisel kategorisini belirlemek için kullanılır.)
-
-
-voilin plot oluşrululması
-
+**voilin plot oluşrululması**
+```python
 import seaborn as sns
 import matplotlib.pyplot as plt
 
@@ -323,13 +336,13 @@ for idx, col in enumerate(cols):
 
 Grafikleri göster
 plt.show()
-
+```
 
 ![voiln](https://github.com/user-attachments/assets/d5023404-8928-4f3c-aa3c-148502e4d25b)
 
 
 
-Correlation Heatmap oluştulasmı
+**Correlation Heatmap oluştulasmı**
 
 
 
@@ -339,39 +352,95 @@ Correlation Heatmap oluştulasmı
 
 Bu özellikten özelliğe korelasyon ısı haritasına dayanarak, karakter sayısı, kelime sayısı ve ortalama cümle uzunluğunun birbirleriyle yüksek bir korelasyona sahip olduğu görülmektedir.
 
-Vektörleştirme(Vectorizing)
+**Vektörleştirme(Vectorizing)**
 
 TF-IDF Vektörleştirici kullanılmıştır; bu, bir kelimenin bir belgede ne kadar sık göründüğünü ve ayrıca kelimenin genel korpustaki ne kadar benzersiz olduğunu dikkate alır. En anlamlı kelimeleri yakalayabilmek için, belgelerdeki kelimelerin en üst %20'sini ve en alt %10'unu kesiyoruz.
 
 ("Korpus" terimi, belirli bir amaca yönelik olarak toplanmış metin veri kümesini ifade eder.)
-
+```python
 tfidf_train = TfidfVectorizer(sublinear_tf=True, max_df=.9, min_df=.05,  ngram_range=(1, 1))
 
 train_features = tfidf_train.fit_transform(X_train).toarray()
 test_features = tfidf_train.transform(X_test).toarray()
+```
 Bu kod, eğitim ve test verilerini TF-IDF vektörlerine dönüştürmek için kullanılır. 
-PCA
+**PCA**
 
 Sonuçların değişip değişmeyeceğini belirlemek için bazı modellerde çok boyutluluğu azaltmak amacıyla PCA (Ana Bileşen Analizi) kullandım.
-
+```python
 pca.n_components_
-     
+```
+çıktısı:
+```python    
 84
+```
 ca.n_components_ PCA (Principal Component Analysis): modelinin kaç tane ana bileşen seçtiğini gösterir. Bu değer, modelin veri setindeki toplam varyansın ne kadarını açıkladığını belirler. n_components=0.9 olarak ayarladığınında, PCA toplam varyansın %90'ını açıklayan yeterli sayıda bileşeni seçecektir.
 
-pcaresmi
+
 
 ![pca](https://github.com/user-attachments/assets/bd33e820-3045-4863-aba8-52b5cc2def03)
 
-
+```python
 def metrics_score(train_preds, y_train, test_preds, y_test):
+```
+Bu fonksiyon kullanılan modellerin değerlendirilemsi için kullanılır.
+Naive Bayes, Logisitic Regression, Logisitic Regression with PCA, Decision Tree, Decision Tree with PCA, Random Forest, Light GBM, KNN kullanıldı(buraya bunlarla ilgili birşeyler yaz kod örneği olabilir) En yüksek doğruluk ve F1 skorunu hangi modelin verdiğini değerlendirmek için birkaç farklı modeli uygun hale getirdim. Her modeli birbirine karşı doğru bir şekilde karşılaştırmak amacıyla, her model için en uygun hiperparametreleri belirlemek üzere bir grid-search gerçekleştirdim.
+```python
+nb = MultinomialNB()
+nb_train_preds = grid_search_nb.best_estimator_.predict(train_features)
+nb_test_preds = grid_search_nb.best_estimator_.predict(test_features)
+metrics_score(nb_train_preds, y_train, nb_test_preds, y_test)
 
-Naive Bayes, Logisitic Regression, Logisitic Regression with PCA, Decision Tree, Decision Tree with PCA, random forest, lightgbm, knn kullnıldı(buraya bunlarla ilgili birşeyler yaz kod örneği olabilir) En yüksek doğruluk ve F1 skorunu hangi modelin verdiğini değerlendirmek için birkaç farklı modeli uygun hale getirdim. Her modeli birbirine karşı doğru bir şekilde karşılaştırmak amacıyla, her model için en uygun hiperparametreleri belirlemek üzere bir grid-search gerçekleştirdim.
 
-MODEL DEĞERLENDİRME
+logistic = linear_model.LogisticRegression(penalty='l2', class_weight='balanced', random_state=42)
+grid_search_LR.fit(train_scaled, y_train)
+lr_train_preds = grid_search_LR.best_estimator_.predict(train_scaled)
+lr_test_preds = grid_search_LR.best_estimator_.predict(test_scaled)
+metrics_score(lr_train_preds, y_train, lr_test_preds, y_test)
+
+
+logistic = linear_model.LogisticRegression(penalty='l2', class_weight='balanced', random_state=42)
+lr_train_preds_pca = grid_search_LR_pca.best_estimator_.predict(pca_train)
+lr_test_preds_pca = grid_search_LR_pca.best_estimator_.predict(pca_test)
+metrics_score(lr_train_preds_pca, y_train, lr_test_preds_pca, y_test)
+
+
+DT = tree.DecisionTreeClassifier(criterion =  'gini', max_depth= 10, random_state = 42)
+dt_train_preds = grid_search_DT.best_estimator_.predict(train_features)
+dt_test_preds = grid_search_DT.best_estimator_.predict(test_features)
+metrics_score(dt_train_preds, y_train, dt_test_preds, y_test)
+
+
+DT = tree.DecisionTreeClassifier(criterion =  'gini', max_depth= 10, random_state = 42)
+dt_train_preds_pca = grid_search_DT_pca.best_estimator_.predict(pca_train)
+dt_test_preds_pca = grid_search_DT_pca.best_estimator_.predict(pca_test)
+metrics_score(dt_train_preds_pca, y_train, dt_test_preds_pca, y_test)
+
+
+rf = RandomForestClassifier(random_state = 42)
+rf_train_preds = grid_search_RF.best_estimator_.predict(train_features)
+rf_test_preds = grid_search_RF.best_estimator_.predict(test_features)
+metrics_score(rf_train_preds, y_train, rf_test_preds, y_test)
+
+
+lgbm = LGBMClassifier(random_state=42)
+gbm_train_preds = grid_lgbm.best_estimator_.predict(train_features)
+gbm_test_preds = grid_lgbm.best_estimator_.predict(test_features)
+metrics_score(gbm_train_preds, y_train, gbm_test_preds, y_test)
+
+
+knn = KNeighborsClassifier()
+knn_train_preds = grid_knn.best_estimator_.predict(train_scaled)
+knn_test_preds = grid_knn.best_estimator_.predict(test_scaled)
+metrics_score(knn_train_preds, y_train, knn_test_preds, y_test)
+```
 
 
 
+**MODEL DEĞERLENDİRME**
+
+
+```python
 model_candidates = [
 
     {'name':'Naive Bayes',
@@ -407,19 +476,20 @@ model_candidates = [
     'f1 score':metrics.f1_score(y_test, knn_test_preds, average='weighted')}
 
 ]
+```
+model değerlendireme için bu kod kullanıldı.
+| Model                      | Accuracy Score | F1 Score  |
+|----------------------------|----------------|-----------|
+| Naive Bayes                | 0.712963       | 0.645777  |
+| Logistic Regression        | 0.597222       | 0.621896  |
+| Logistic Regression (PCA)  | 0.597222       | 0.623525  |
+| Decision Tree              | 0.662037       | 0.593373  |
+| Decision Tree (PCA)        | 0.680556       | 0.568102  |
+| Random Forest              | 0.675926       | 0.545222  |
+| Light GBM                  | 0.726852       | 0.703356  |
+| KNN                        | 0.694444       | 0.586114  |
 
-
-	accuracy score	f1 score
-name		
-Naive Bayes	0.712963	0.645777
-Logistic Regression	0.597222	0.621896
-Logistic Regression (PCA)	0.597222	0.623525
-Decision Tree	0.662037	0.593373
-Decision Tree (PCA)	0.680556	0.568102
-Random Forest	0.675926	0.545222
-Light GBM	0.726852	0.703356
-KNN	0.694444	0.586114
- modeller için confussion matris
+ **modeller için confussion matris**
  
 ![conf2](https://github.com/user-attachments/assets/f5866f3b-de7b-4b32-8331-c4d0cb63d5f3)
 
