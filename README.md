@@ -496,4 +496,5 @@ model değerlendireme için bu kod kullanıldı.
 ![conf4](https://github.com/user-attachments/assets/7b95ab28-7071-4082-ad1c-5146375ff1e6)
 
 
-
+## Tanıtım Videosu
+Projenin kullanımıyla ilgili detaylı bir tanıtım videosunu [izleyebilirsiniz](https://www.youtube.com/watch?v=NfVmpycYMQc).
