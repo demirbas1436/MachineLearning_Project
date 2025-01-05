@@ -497,4 +497,4 @@ model değerlendireme için bu kod kullanıldı.
 
 
 ## Tanıtım Videosu
-Projenin kullanımıyla ilgili detaylı bir tanıtım videosunu [izleyebilirsiniz](#).
+Projenin kullanımıyla ilgili detaylı bir tanıtım videosunu [izleyebilirsiniz](https://www.youtube.com/watch?v=8QY4PTmUeic).
