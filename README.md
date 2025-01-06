@@ -35,7 +35,7 @@ Bu projeyi çalıştırmak için aşağıdaki araç ve kütüphaneler gereklidir
 
 1. **Projeyi indirin:**
    ```bash
-   git clone https://github.com/kullanici_adi/tripadvisor-yorum-analizi.git
+   git clone https://github.com/demirbas1436/MachineLearning_Project
    cd tripadvisor-yorum-analizi
    ```
 
